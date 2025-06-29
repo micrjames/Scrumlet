@@ -1,0 +1,62 @@
+{
+  "name": "scrumlet",
+  "version": "0.1.1",
+  "description": "A desktop Scrum workflow manager for solo developers, built with Electron and PostgreSQL.",
+  "main": "dist/main/index.js",
+  "type": "module",
+  "scripts": {
+	  "clean": "[ -d dist ] && rm -rf dist || echo '⚠️  dist directory not found.'; [ -d dist-electron ] && rm -rf dist-electron || echo '⚠️  dist-electron directory not found.'; [ -d src/renderer/dist-electron ] && rm -rf src/renderer/dist-electron || echo '⚠️  src/renderer/dist-electron directory not found.'",
+	  "copy-static": "mkdir -p dist/main && cp src/renderer/index.html dist/main/index.html",
+	  "compile": "tsc && npm run copy-static",
+	  "dev": "npm run compile && electron .",
+	  "build": "npm run compile && electron-builder",
+	  "dist": "npm run clean && npm run build",
+	  "start": "npm run dev",
+	  "test": "jest",
+	  "test:coverage": "jest --coverage"
+  },
+  "build": {
+    "appId": "com.scrumlet.app",
+    "productName": "Scrumlet",
+    "files": [
+      "dist/**",
+      "assets/**",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micrjames/Scrumlet.git"
+  },
+  "keywords": [],
+  "author": "Sḱreieweydō",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/micrjames/Scrumlet/issues"
+  },
+  "homepage": "https://github.com/micrjames/Scrumlet#readme",
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "@electron/remote": "^2.1.2",
+    "concurrently": "^9.2.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3",
+    "wait-on": "^8.0.3"
+  }
+}

@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/
+dist/
+tree-lite-0.0.1.sh
+src/renderer/dist-electron
