@@ -1,10 +1,8 @@
-import { app, BrowserWindow, Event, Tray, Menu, nativeImage } from 'electron';
+import { app, BrowserWindow, Event, Tray } from 'electron';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { createTray } from './aTray.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -27,49 +25,7 @@ function createWindow() {
 
 	mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-
-	// Create tray icon
-	const iconPath = path.join(__dirname, '../../assets/icon-data.txt');
-
-	const iconDataURL = fs.readFileSync(iconPath, 'utf-8');
-	const icon = nativeImage.createFromDataURL(iconDataURL);
-
-	tray = new Tray(icon);
-
-	// Context menu for tray icon
-	const contextMenu = Menu.buildFromTemplate([
-		{
-			label: 'Show Window',
-			click: () => {
-				if(mainWindow) mainWindow.show();
-			}
-		},
-		{
-			label: 'Hide Window',
-			click: () => {
-				if(mainWindow) mainWindow.hide();
-			}
-		},
-		{ type: 'separator' },
-		{
-			label: 'Quit',
-			click: () => {
-				app.quit();
-			}
-		}
-	]);
-
-	tray.setToolTip('Scrumlet');
-	tray.setContextMenu(contextMenu);
-	tray.setTitle('Scrumlet');
-
-	tray.on('click', () => {
-		if(mainWindow?.isVisible()) {
-			mainWindow.hide();
-		} else {
-			mainWindow?.show();
-		}
-	});
+	tray = createTray(mainWindow);
 
 	app.on('before-quit', () => {
 	  isQuitting = true;
